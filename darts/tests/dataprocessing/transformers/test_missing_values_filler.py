@@ -35,6 +35,15 @@ class TestMissingValuesFiller:
         assert self.const_series == transformed
         assert self.const_series_with_holes == series_copy
 
+    @pytest.mark.parametrize("fill", [0, 3, np.int64(3), np.float32(3.0)])
+    def test_fill_with_non_float_numeric_value(self, fill):
+        transformed = MissingValuesFiller(fill=fill).transform(
+            self.const_series_with_holes
+        )
+        expected = self.const_series_with_holes.values().copy()
+        expected[np.isnan(expected)] = float(fill)
+        np.testing.assert_array_equal(transformed.values(), expected)
+
     def test_fill_const_series_with_auto_value(self):
         auto_transformer = MissingValuesFiller()
         transformed = auto_transformer.transform(self.const_series_with_holes)

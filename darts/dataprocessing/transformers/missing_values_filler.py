@@ -4,6 +4,7 @@ Missing Values Filler
 """
 
 from collections.abc import Mapping
+from numbers import Real
 from typing import Any
 
 from darts import TimeSeries
@@ -60,7 +61,7 @@ class MissingValuesFiller(BaseDataTransformer):
          [0.5 ]
          [0.75]]
         """
-        if not (isinstance(fill, str) or isinstance(fill, float)):
+        if not isinstance(fill, (str, Real)):
             raise_log(
                 ValueError("`fill` should either be a string or a float."),
             )

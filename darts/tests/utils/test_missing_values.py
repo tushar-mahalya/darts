@@ -25,6 +25,15 @@ class TestMissingValues:
         time, [0] * 2 + cub[2:-2] + [-1] * 2
     )
 
+    @pytest.mark.parametrize("fill", [0, 2, np.int64(2), np.float32(2.0), 2.0])
+    def test_fill_numeric_constant(self, fill):
+        series = TimeSeries.from_times_and_values(
+            self.time, np.array([2.0] * 5 + [np.nan] * 5 + [2.0] * 20)
+        )
+        filled = fill_missing_values(series, fill)
+        np.testing.assert_array_equal(filled.values()[5:10], float(fill))
+        np.testing.assert_array_equal(filled.values()[:5], 2.0)
+
     def test_fill_constant(self):
         seriesA: TimeSeries = TimeSeries.from_times_and_values(
             self.time,

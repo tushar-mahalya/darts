@@ -3,6 +3,8 @@ Utils for filling missing values
 --------------------------------
 """
 
+from numbers import Real
+
 from darts import TimeSeries
 from darts.logging import raise_log
 
@@ -49,7 +51,7 @@ def fill_missing_values(
     TimeSeries
         A new TimeSeries with all missing values filled according to the rules above.
     """
-    if not (isinstance(fill, str) or isinstance(fill, float)):
+    if not isinstance(fill, (str, Real)):
         raise_log(ValueError("`fill` should either be a string or a float."))
     if isinstance(fill, str) and fill != "auto":
         raise_log(
